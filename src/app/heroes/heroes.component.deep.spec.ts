@@ -30,14 +30,20 @@ describe('HeroesComponent (deep tests)', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
+
     fixture = TestBed.createComponent(HeroesComponent);
-    mockHeroService.getHeroes.and.returnValue(of(HEROES));
-
-    fixture.detectChanges();
-
   });
 
-  it('should be true', () => {
-    expect(true).toBe(true);
+  it('should render each hero as a HeroComponent', () => {
+    mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+    // run ngOnInit
+    fixture.detectChanges();
+
+    const heroComponentsDEs = fixture.debugElement.queryAll(By.directive(HeroComponent));
+    expect(heroComponentsDEs.length).toEqual(3);
+    for(let i=0; i < heroComponentsDEs.length; i++) {
+      expect(heroComponentsDEs[i].componentInstance.hero).toEqual(HEROES[i]);
+    }
   })
 });
